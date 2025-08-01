@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LOVE YOU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        body {
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .heart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 20px;
+            animation: float 8s linear infinite, glow 1.5s ease-in-out infinite alternate;
+            opacity: 0;
+            filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.7));
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(120vh) rotate(0deg);
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(255, 105, 180, 1);
+            }
+        }
+        
+        .message-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .message {
+            color: #89cff0;
+            font-size: 11vw;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            animation: pulse 1.5s infinite, fadeIn 1.5s ease-out forwards;
+            text-shadow: 
+                0 0 10px rgba(137, 207, 240, 0.8),
+                0 0 20px rgba(137, 207, 240, 0.6),
+                0 0 30px rgba(137, 207, 240, 0.4);
+            position: relative;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            z-index: 15;
+        }
+        
+        .decorations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 12;
+            pointer-events: none;
+        }
+        
+        .rose {
+            position: absolute;
+            font-size: 25vw;
+            animation: floatRose 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 100, 0.8));
+            color: #ff007b;
+            top: 25%;
+            left: 10%;
+            transform: rotate(-20deg);
+            z-index: 14;
+            opacity: 0.85;
+        }
+        
+        .ring {
+            position: absolute;
+            font-size: 25vw;
+            animation: floatRing 8s ease-in-out infinite;
+            color: #f0f0f0;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            top: 25%;
+            right: 10%;
+            transform: rotate(20deg);
+            z-index: 14;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 15px gold);
+        }
+        
+        @keyframes floatRose {
+            0%, 100% {
+                transform: translateY(0) rotate(-20deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(-25deg);
+            }
+        }
+        
+        @keyframes floatRing {
+            0%, 100% {
+                transform: translateY(0) rotate(20deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(15deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 0.9;
+                transform: scale(1);
+            }
+        }
+        
+        .subtitle {
+            margin-top: 5vw;
+            font-size: 4vw;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeInText 2s forwards 1.5s;
+            text-align: center;
+            padding: 0 10px;
+        }
+        
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 0.8;
+                transform: translateY(0);
+            }
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeInText 2s forwards 2.5s;
+            pointer-events: none;
+        }
+        
+        .info {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container" id="hearts"></div>
+    <div class="decorations">
+        <div class="rose">🌹</div>
+        <div class="ring">💍</div>
+    </div>
+    <div class="message-container">
+        <div class="message">I LOVE U</div>
+        <div class="subtitle">Forever and Always</div>
+    </div>
+    <div class="footer">Created with ❤️</div>
+    <div class="info">轻触屏幕查看更多爱心</div>
+
+    <script>
+        // 创建爱心元素
+        function createHearts(count = 30) {
+            const container = document.getElementById('hearts');
+            
+            // 清除现有的爱心
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+            
+            for (let i = 0; i < count; i++) {
+                createSingleHeart();
+            }
+        }
+        
+        // 创建单个爱心
+        function createSingleHeart() {
+            const container = document.getElementById('hearts');
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.classList.add('heart');
+            
+            // 随机位置和尺寸
+            const size = Math.random() * 25 + 15;
+            const left = Math.random() * 100;
+            const delay = Math.random() * 6;
+            const duration = Math.random() * 4 + 6;
+            
+            heart.style.left = `${left}%`;
+            heart.style.fontSize = `${size}px`;
+            heart.style.animationDuration = `${duration}s, 1.5s`;
+            heart.style.animationDelay = `${delay}s, ${Math.random() * 2}s`;
+            
+            container.appendChild(heart);
+        }
+        
+        // 响应式处理
+        function handleResize() {
+            const message = document.querySelector('.message');
+            const subtitle = document.querySelector('.subtitle');
+            
+            if (window.innerWidth < 600) {
+                message.style.fontSize = '11vw';
+                subtitle.style.fontSize = '4vw';
+                subtitle.style.marginTop = '5vw';
+                
+                document.querySelector('.rose').style.fontSize = '25vw';
+                document.querySelector('.ring').style.fontSize = '25vw';
+                document.querySelector('.rose').style.top = '25%';
+                document.querySelector('.ring').style.top = '25%';
+            } else {
+                message.style.fontSize = '6vw';
+                subtitle.style.fontSize = '2vw';
+                subtitle.style.marginTop = '2vw';
+                
+                document.querySelector('.rose').style.fontSize = '15vw';
+                document.querySelector('.ring').style.fontSize = '15vw';
+                document.querySelector('.rose').style.top = '30%';
+                document.querySelector('.ring').style.top = '30%';
+            }
+        }
+        
+        // 页面加载完成后执行
+        window.addEventListener('DOMContentLoaded', () => {
+            createHearts();
+            handleResize();
+            
+            // 触摸事件监听（适用于微信浏览器）
+            document.body.addEventListener('touchstart', function() {
+                createSingleHeart();
+                createSingleHeart();
+            });
+            
+            // 鼠标点击事件监听
+            document.body.addEventListener('click', function() {
+                createSingleHeart();
+                createSingleHeart();
+            });
+        });
+        
+        // 窗口大小改变时更新
+        window.addEventListener('resize', handleResize);
+    </script>
+</body>
+</html>
